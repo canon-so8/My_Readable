@@ -24,7 +24,6 @@
 | PDF処理 | PyMuPDF (fitz) |
 | 翻訳 | Google Translate (deep-translator) |
 | フォント | IPAexゴシック |
-| デプロイ | Vercel Serverless Functions（オプション） |
 
 ## 🚀 セットアップ
 
