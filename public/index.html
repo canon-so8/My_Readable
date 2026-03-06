@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Readable - PDF翻訳アプリ</title>
+    <meta name="description" content="PDFをアップロードして、レイアウトを保持したまま日本語に翻訳">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- ヘッダー -->
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4h16v16H4V4z" stroke="currentColor" stroke-width="2" />
+                    <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <span class="logo-text">My Readable</span>
+            </div>
+            <p class="tagline">PDFを翻訳、レイアウトはそのまま</p>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- アップロードセクション -->
+            <section id="upload-section" class="upload-section">
+                <div class="upload-zone" id="drop-zone">
+                    <div class="upload-icon">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 44V20M32 20L22 30M32 20L42 30" stroke="currentColor" stroke-width="3"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12 44v4a4 4 0 004 4h32a4 4 0 004-4v-4" stroke="currentColor" stroke-width="3"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h2 class="upload-title">PDFをドラッグ＆ドロップ</h2>
+                    <p class="upload-subtitle">または</p>
+                    <label class="upload-button">
+                        <input type="file" id="file-input" accept=".pdf" multiple hidden>
+                        ファイルを選択（複数可）
+                    </label>
+                    <p class="upload-hint">対応形式: PDF (最大 100MB / 複数ファイル選択可)</p>
+                </div>
+            </section>
+
+            <!-- 進捗セクション -->
+            <section id="progress-section" class="progress-section hidden">
+                <div class="progress-card">
+                    <!-- ファイルキュー全体進捗 -->
+                    <div id="queue-header" class="queue-header hidden">
+                        <span class="queue-header-label">ファイルキュー</span>
+                        <span id="queue-counter" class="queue-counter">1 / 1</span>
+                    </div>
+
+                    <div class="file-info">
+                        <svg class="file-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor"
+                                stroke-width="2" />
+                            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span id="file-name" class="file-name">document.pdf</span>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span id="progress-status" class="progress-status">翻訳準備中...</span>
+                            <span id="progress-page-info" class="progress-page-info"></span>
+                            <span id="progress-percent" class="progress-percent">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-steps">
+                        <div class="step active" id="step-1">
+                            <div class="step-dot"></div>
+                            <span>アップロード</span>
+                        </div>
+                        <div class="step" id="step-2">
+                            <div class="step-dot"></div>
+                            <span>解析中</span>
+                        </div>
+                        <div class="step" id="step-3">
+                            <div class="step-dot"></div>
+                            <span>翻訳中</span>
+                        </div>
+                        <div class="step" id="step-4">
+                            <div class="step-dot"></div>
+                            <span>完了</span>
+                        </div>
+                    </div>
+
+                    <!-- ファイルキューリスト -->
+                    <div id="queue-list" class="queue-list hidden"></div>
+                </div>
+            </section>
+
+            <!-- 完了セクション -->
+            <section id="complete-section" class="complete-section hidden">
+                <div class="complete-card">
+                    <div class="complete-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3" />
+                            <path d="M20 32l8 8 16-16" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <h2 class="complete-title" id="complete-title">翻訳完了！</h2>
+                    <p class="complete-subtitle" id="complete-subtitle">PDFの翻訳が完了しました</p>
+
+                    <div class="complete-stats" id="complete-stats">
+                        <div class="stat">
+                            <span class="stat-value" id="stat-pages">0</span>
+                            <span class="stat-label">ページ</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="stat-blocks">0</span>
+                            <span class="stat-label">テキストブロック</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="stat-elapsed">-</span>
+                            <span class="stat-label">所要時間</span>
+                        </div>
+                    </div>
+
+                    <div id="reference-skip-notice" class="reference-skip-notice hidden">
+                        <svg viewBox="0 0 24 24" fill="none" class="notice-icon">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                            <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <span id="reference-skip-message">参考文献以降のページは翻訳をスキップしました</span>
+                    </div>
+
+                    <!-- 複数ファイル完了リスト -->
+                    <div id="complete-file-list" class="complete-file-list hidden"></div>
+
+                    <div class="complete-actions">
+                        <button id="download-btn" class="btn btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            ダウンロード
+                        </button>
+                        <button id="download-all-btn" class="btn btn-primary hidden">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            すべてダウンロード
+                        </button>
+                        <button id="new-file-btn" class="btn btn-secondary">
+                            新しいファイルを翻訳
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- エラーセクション -->
+            <section id="error-section" class="error-section hidden">
+                <div class="error-card">
+                    <div class="error-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3" />
+                            <path d="M24 24l16 16M40 24L24 40" stroke="currentColor" stroke-width="3"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h2 class="error-title">エラーが発生しました</h2>
+                    <p id="error-message" class="error-message">不明なエラーが発生しました</p>
+                    <button id="retry-btn" class="btn btn-primary">再試行</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- フッター -->
+        <footer class="footer">
+            <p>Powered by Gemini / Google Translate & PyMuPDF</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

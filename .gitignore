@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# 環境
+.env
+.venv/
+venv/
+
+# 翻訳キャッシュ（個人データ）
+translation_cache.json
+translation_cache_backup.json
+translation_cache_google_backup.json
+
+# フォント（配布用ttfのみ残し、ZIPと展開フォルダは除外）
+fonts/IPAexfont00401.zip
+fonts/IPAexfont00401/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# docs（開発メモ。必要なら削除してください）
+docs/
