@@ -35,8 +35,8 @@
 ### インストール
 
 ```bash
-git clone https://github.com/<your-username>/my-readable.git
-cd my-readable
+git clone https://github.com/canon-so8/My_Readable.git
+cd My_Readable
 pip install -r requirements.txt
 ```
 
